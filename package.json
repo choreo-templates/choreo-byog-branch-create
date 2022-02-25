@@ -1,0 +1,15 @@
+{
+  "name": "choreo-byog-trigger",
+  "version": "1.0.0",
+  "description": "Choreo bring your own GitHub Repo Custom Action ",
+  "main": "index.js",
+  "repository": "https://github.com/choreo-templates/choreo-byog-trigger.git",
+  "author": "Shehanka <chamodp@wso2.com>",
+  "license": "Apache 2.0",
+  "private": true,
+  "dependencies": {
+    "@actions/core": "^1.6.0",
+    "@actions/github": "^5.0.0",
+    "axios": "^0.26.0"
+  }
+}

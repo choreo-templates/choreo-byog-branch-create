@@ -1,2 +1,2 @@
 # choreo-byog-trigger
-Choreo bring your own GitHub Repo CustomAction 
+Choreo bring your own GitHub Repo Custom Action 
