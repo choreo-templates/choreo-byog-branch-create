@@ -28,6 +28,7 @@ class GitHubService {
 
     async createBranch(branch, headBranch = "main") {
         console.log(`Creating branch ${branch} in ${this.org}/${this.repo}`);
+        console.log(`Getting head branch: ${headBranch} sha`);
         const referenceRes = await this.octokit.request(
             "GET /repos/{owner}/{repo}/git/ref/{ref}",
             {
@@ -38,7 +39,11 @@ class GitHubService {
         );
         const ref = referenceRes?.data;
         const sha = ref?.object?.sha;
-
+        console.log(`Head branch sha: ${sha}`);
+        if (!sha) {
+            throw new Error(`Head branch ${headBranch} does not exist in ${this.org}/${this.repo}`);
+        }
+        console.log(`Creating branch ${branch} with sha ${sha}`);
         const response = await this.octokit.request('POST /repos/{owner}/{repo}/git/refs', {
             owner: this.org,
             repo: this.repo,
