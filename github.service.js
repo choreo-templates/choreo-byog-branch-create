@@ -1,4 +1,4 @@
-const {Octokit} = require("@octokit/core");
+import {Octokit} from "@octokit/core";
 
 class GitHubService {
     constructor(authToken, org, repo) {
