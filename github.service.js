@@ -1,11 +1,6 @@
 const {Octokit} = require("@octokit/core");
 
 class GitHubService {
-    private token;
-    private org;
-    private repo;
-    private octokit;
-
     constructor(authToken, org, repo) {
         this.authToken = authToken;
         this.org = org;
@@ -48,4 +43,4 @@ class GitHubService {
     }
 }
 
-export { GitHubService };
+export {GitHubService};
