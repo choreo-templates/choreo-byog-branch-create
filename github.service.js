@@ -1,6 +1,6 @@
 const {Octokit} = require("@octokit/core");
 
-export class GitHubService {
+class GitHubService {
     private token;
     private org;
     private repo;
@@ -47,3 +47,5 @@ export class GitHubService {
         return response.status === 201;
     }
 }
+
+export { GitHubService };

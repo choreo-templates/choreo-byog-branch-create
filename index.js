@@ -1,5 +1,5 @@
 const core = require('@actions/core');
-const {GitHubService} = require("./github.service");
+const { GitHubService } = require("./github.service");
 const defaultBranch = "main";
 
 try {
