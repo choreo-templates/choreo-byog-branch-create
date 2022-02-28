@@ -1,2 +1,18 @@
 # choreo-byog-trigger
-Choreo bring your own GitHub Repo Custom Action 
+
+Choreo bring your own GitHub Repo Custom Action
+
+#### Sample Usage
+
+```json
+{
+  name: "Create Branch on user repo",
+  uses: "choreo-templates/choreo-byog-branch-create@v1.0.0",
+  with: {
+    token: "${{ env.APP_GH_TOKEN }}",
+    org: "${{env.ORG_NAME}}",
+    userRepoName: "${{env.APP_NAME}}",
+    branch: "choreo-dev"
+  }
+}
+```
