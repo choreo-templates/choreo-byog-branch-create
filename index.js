@@ -1,5 +1,4 @@
 const core = require('@actions/core');
-const github = require('@actions/github');
 const {GitHubService} = require("./github.service");
 const defaultBranch = "main";
 
@@ -10,17 +9,26 @@ try {
     const branch = core.getInput('branch');
 
     const githubService = new GitHubService(token, org, userRepoName)
-    const isBranchExists = await githubService.isBranchExists(branch);
+    let isBranchExists;
+    githubService.isBranchExists(branch).then(res => {
+        isBranchExists = res;
+        if (!isBranchExists) {
+            console.log(`Branch ${branch} does not exist`);
+            core.setOutput('branchExists', 'false');
 
-    if (isBranchExists) {
-        console.log(`Branch ${branch} exists`);
-        core.setOutput('branchExists', 'true');
-    } else {
-        console.log(`Branch ${branch} does not exist`);
-        core.setOutput('branchExists', 'false');
+            githubService.createBranch(branch, defaultBranch).then(res => {
+                console.log(`Branch ${branch} created`);
+                core.setOutput('branchCreated', 'true');
+            }).catch(err => {
+                console.log(`Branch ${branch} creation failed : ${err}`);
+                core.setOutput('branchExists', 'false');
+            });
+        } else {
+            console.log(`Branch ${branch} exists`);
+            core.setOutput('branchExists', 'true');
+        }
+    });
 
-        return await githubService.createBranch(branch, defaultBranch);
-    }
 
 } catch (e) {
     core.setOutput("choreo-status", "failed");
