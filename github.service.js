@@ -1,30 +1,21 @@
 const {Octokit} = require("@octokit/core");
 
-interface GitHubRefRes {
-    ref: string;
-    node_id: string;
-    url: string;
-    object: {
-        sha: string;
-        type: string;
-        url: string;
-    };
-}
-
 export class GitHubService {
-    private token: string;
-    private org: string;
-    private repo: string;
-    private octokit: Octokit;
+    private token;
+    private org;
+    private repo;
+    private octokit;
 
-    constructor(authToken: string, org: string, repo: string) {
+    constructor(authToken, org, repo) {
         this.authToken = authToken;
+        this.org = org;
+        this.repo = repo;
         this.octokit = new Octokit({
             auth: this.authToken
         });
     }
 
-    async isBranchExists(branch: string): Promise<boolean> {
+    async isBranchExists(branch) {
         const response = await this.octokit.request('GET /repos/{owner}/{repo}/branches/{branch}', {
             owner: this.org,
             repo: this.repo,
@@ -34,7 +25,7 @@ export class GitHubService {
         return response.status === 200;
     }
 
-    async createBranch(branch: string, headBranch: string = "main"): Promise<void> {
+    async createBranch(branch, headBranch = "main") {
         const referenceRes = await this.octokit.request(
             "GET /repos/{owner}/{repo}/git/ref/{ref}",
             {
@@ -43,8 +34,8 @@ export class GitHubService {
                 ref: `heads/${headBranch}`,
             }
         );
-        const ref: GitHubRefRes = referenceRes.data;
-        const sha = ref.object.sha;
+        const ref = referenceRes?.data;
+        const sha = ref?.object?.sha;
 
         const response = await this.octokit.request('POST /repos/{owner}/{repo}/git/refs', {
             owner: this.org,
