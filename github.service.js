@@ -12,13 +12,18 @@ class GitHubService {
 
     async isBranchExists(branch) {
         console.log(`Checking if branch ${branch} exists in ${this.org}/${this.repo}`);
-        const response = await this.octokit.request('GET /repos/{owner}/{repo}/branches/{branch}', {
-            owner: this.org,
-            repo: this.repo,
-            branch: branch
-        });
+        try {
+            const response = await this.octokit.request('GET /repos/{owner}/{repo}/branches/{branch}', {
+                owner: this.org,
+                repo: this.repo,
+                branch: branch
+            });
 
-        return response.status === 200;
+            return response.status === 200;
+        } catch (e) {
+            console.log(`Branch ${branch} does not exist in ${this.org}/${this.repo}`);
+            return false;
+        }
     }
 
     async createBranch(branch, headBranch = "main") {
