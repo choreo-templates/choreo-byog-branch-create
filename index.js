@@ -1,5 +1,5 @@
-const core = require('@actions/core');
-const { GitHubService } = require("./github.service");
+import * as core from '@actions/core';
+import { GitHubService } from './github.service';
 const defaultBranch = "main";
 
 try {
