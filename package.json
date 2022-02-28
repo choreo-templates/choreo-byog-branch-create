@@ -13,5 +13,6 @@
     "@octokit/core": "^3.5.1",
     "axios": "^0.26.0",
     "prettier": "^2.5.1"
-  }
+  },
+  "type": "module"
 }
