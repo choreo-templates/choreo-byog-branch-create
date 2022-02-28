@@ -11,6 +11,7 @@ class GitHubService {
     }
 
     async isBranchExists(branch) {
+        console.log(`Checking if branch ${branch} exists in ${this.org}/${this.repo}`);
         const response = await this.octokit.request('GET /repos/{owner}/{repo}/branches/{branch}', {
             owner: this.org,
             repo: this.repo,
@@ -21,6 +22,7 @@ class GitHubService {
     }
 
     async createBranch(branch, headBranch = "main") {
+        console.log(`Creating branch ${branch} in ${this.org}/${this.repo}`);
         const referenceRes = await this.octokit.request(
             "GET /repos/{owner}/{repo}/git/ref/{ref}",
             {
