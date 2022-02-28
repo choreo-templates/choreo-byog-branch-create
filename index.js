@@ -19,14 +19,19 @@ try {
             githubService.createBranch(branch, defaultBranch).then(res => {
                 console.log(`Branch ${branch} created`);
                 core.setOutput('branchCreated', 'true');
-            }).catch(err => {
-                console.log(`Branch ${branch} creation failed : ${err}`);
+            }).catch(e => {
+                console.log(`Branch ${branch} creation failed : ${e}`);
                 core.setOutput('branchExists', 'false');
+                throw e;
             });
         } else {
             console.log(`Branch ${branch} exists`);
             core.setOutput('branchExists', 'true');
         }
+    }).catch(e => {
+        console.log(`Branch ${branch} check failed : ${e}`);
+        core.setOutput('branchCheck', 'false');
+        throw e;
     });
 
 
