@@ -1,5 +1,5 @@
 import * as core from '@actions/core';
-import { GitHubService } from './github.service';
+import {GitHubService} from "./github.service.js";
 const defaultBranch = "main";
 
 try {
