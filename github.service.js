@@ -44,14 +44,21 @@ class GitHubService {
             throw new Error(`Head branch ${headBranch} does not exist in ${this.org}/${this.repo}`);
         }
         console.log(`Creating branch ${branch} with sha ${sha}`);
-        const response = await this.octokit.request('POST /repos/{owner}/{repo}/git/refs', {
-            owner: this.org,
-            repo: this.repo,
-            ref: `refs/heads/${branch}`,
-            sha: sha
-        });
 
-        return response.status === 201;
+        try {
+            const response = await this.octokit.request('POST /repos/{owner}/{repo}/git/refs', {
+                owner: this.org,
+                repo: this.repo,
+                ref: `refs/heads/${branch}`,
+                sha: sha
+            });
+
+            return response.status === 201;
+        } catch (e) {
+            console.log(`Branch ${branch} creation failed in ${this.org}/${this.repo}: [ERROR] ${e.message}`);
+            throw e;
+        }
+
     }
 }
 
