@@ -1,8 +1,8 @@
 import * as core from '@actions/core';
 import {GitHubService} from "./github.service.js";
-const defaultBranch = "main";
 
 try {
+    const headUserBranch = core.getInput('headBranch') || "main";
     const token = core.getInput('token');
     const org = core.getInput('org');
     const userRepoName = core.getInput('userRepoName');
@@ -16,7 +16,7 @@ try {
             console.log(`Branch ${branch} does not exist`);
             core.setOutput('branchExists', 'false');
 
-            githubService.createBranch(branch, defaultBranch).then(res => {
+            githubService.createBranch(branch, headUserBranch).then(res => {
                 console.log(`Branch ${branch} created`);
                 core.setOutput('branchCreated', 'true');
             }).catch(e => {

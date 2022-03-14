@@ -20,3 +20,7 @@ inputs:
   branch:
     required: true
     description: 'The branch of the user repository which going to push changes'
+  headBranch:
+    required: false
+    description: 'The head branch of the user repository'
+    default: 'main'
