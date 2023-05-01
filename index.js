@@ -1,15 +1,28 @@
 import * as core from '@actions/core';
 import {GitHubService} from "./github.service.js";
+import {BitbucketService} from "./bitbucket.service.js";
 
 try {
     const headUserBranch = core.getInput('headBranch') || "main";
+    const gitProvider = core.getInput('gitProvider') || "github";
+    const username = core.getInput('username');
     const token = core.getInput('token');
     const org = core.getInput('org');
     const userRepoName = core.getInput('userRepoName');
     const branch = core.getInput('branch');
 
-    const githubService = new GitHubService(token, org, userRepoName)
-    let isBranchExists;
+    let gitHubService;
+    if (gitProvider == "github") {
+        githubService = new GitHubService(token, org, userRepoName)
+    } else if (gitProvider == "bitbucket") {
+        githubService = new BitbucketService(token, username, org, userRepoName)
+    } else {
+        core.setOutput("choreo-status", "failed");
+        core.setFailed("Invalid git provider");
+        console.log("choreo-status", "failed");
+        console.log("Invalid git provider");
+    }
+    
     githubService.isBranchExists(branch).then(res => {
         isBranchExists = res;
         if (!isBranchExists) {

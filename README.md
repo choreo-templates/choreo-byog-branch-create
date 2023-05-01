@@ -12,4 +12,7 @@ Choreo bring your own GitHub Repo Custom Action
     org: "${{env.ORG_NAME}}",
     userRepoName: "${{env.APP_NAME}}",
     branch: "choreo-dev"
+    headUserBranch: "master"
+    username: "${{env.BB_USERNAME}}",
+    gitProvider: "github"
 ```
