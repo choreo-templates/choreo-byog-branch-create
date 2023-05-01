@@ -11,42 +11,63 @@ try {
     const userRepoName = core.getInput('userRepoName');
     const branch = core.getInput('branch');
 
-    let gitHubService;
     if (gitProvider == "github") {
-        githubService = new GitHubService(token, org, userRepoName)
+        const githubService = new GitHubService(token, org, userRepoName);
+        githubService.isBranchExists(branch).then(res => {
+            let isBranchExists = res;
+            if (!isBranchExists) {
+                console.log(`Branch ${branch} does not exist`);
+                core.setOutput('branchExists', 'false');
+    
+                githubService.createBranch(branch, headUserBranch).then(res => {
+                    console.log(`Branch ${branch} created`);
+                    core.setOutput('branchCreated', 'true');
+                }).catch(e => {
+                    console.log(`Branch ${branch} creation failed : ${e}`);
+                    core.setOutput('branchExists', 'false');
+                    throw e;
+                });
+            } else {
+                console.log(`Branch ${branch} exists`);
+                core.setOutput('branchExists', 'true');
+            }
+        }).catch(e => {
+            console.log(`Branch ${branch} check failed : ${e}`);
+            core.setOutput('branchCheck', 'false');
+            throw e;
+        });
     } else if (gitProvider == "bitbucket") {
-        githubService = new BitbucketService(token, username, org, userRepoName)
+        console.log("bitbucket")
+        const bitbucketService = new BitbucketService(token, username, org, userRepoName)
+        bitbucketService.isBranchExists(branch).then(res => {
+            let isBranchExists = res;
+            if (!isBranchExists) {
+                console.log(`Branch ${branch} does not exist`);
+                core.setOutput('branchExists', 'false');
+
+                bitbucketService.createBranch(branch, headUserBranch).then(res => {
+                    console.log(`Branch ${branch} created`);
+                    core.setOutput('branchCreated', 'true');
+                }).catch(e => {
+                    console.log(`Branch ${branch} creation failed : ${e}`);
+                    core.setOutput('branchExists', 'false');
+                    throw e;
+                });
+            } else {
+                console.log(`Branch ${branch} exists`);
+                core.setOutput('branchExists', 'true');
+            }
+        }).catch(e => {
+            console.log(`Branch ${branch} check failed : ${e}`);
+            core.setOutput('branchCheck', 'false');
+            throw e;
+        });
     } else {
         core.setOutput("choreo-status", "failed");
         core.setFailed("Invalid git provider");
         console.log("choreo-status", "failed");
         console.log("Invalid git provider");
     }
-    
-    githubService.isBranchExists(branch).then(res => {
-        isBranchExists = res;
-        if (!isBranchExists) {
-            console.log(`Branch ${branch} does not exist`);
-            core.setOutput('branchExists', 'false');
-
-            githubService.createBranch(branch, headUserBranch).then(res => {
-                console.log(`Branch ${branch} created`);
-                core.setOutput('branchCreated', 'true');
-            }).catch(e => {
-                console.log(`Branch ${branch} creation failed : ${e}`);
-                core.setOutput('branchExists', 'false');
-                throw e;
-            });
-        } else {
-            console.log(`Branch ${branch} exists`);
-            core.setOutput('branchExists', 'true');
-        }
-    }).catch(e => {
-        console.log(`Branch ${branch} check failed : ${e}`);
-        core.setOutput('branchCheck', 'false');
-        throw e;
-    });
-
 
 } catch (e) {
     core.setOutput("choreo-status", "failed");
